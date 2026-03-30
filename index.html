@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>مافيا - النسخة المتطورة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#0d0808;--card:#1a1012;--card2:#241618;--accent:#c62828;--accent-lt:#ef5350;--gold:#d4a017;--text:#f0e6e0;--muted:#7a6a6a;--border:#3a2025;--green:#2e7d32;--blue:#1565c0;--orange:#e65100;--brown:#5d4037}
+*{margin:0;padding:0;box-sizing:border-box;user-select:none;-webkit-tap-highlight-color:transparent}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(198,40,40,.08),transparent 70%),radial-gradient(ellipse at 80% 80%,rgba(212,160,23,.04),transparent 60%);pointer-events:none;z-index:0}
+.ember{position:fixed;width:3px;height:3px;background:var(--accent-lt);border-radius:50%;opacity:0;animation:emberUp linear infinite;pointer-events:none;z-index:0}
+@keyframes emberUp{0%{opacity:0;transform:translateY(0) scale(.5)}15%{opacity:.7}85%{opacity:.2}100%{opacity:0;transform:translateY(-100vh) scale(0)}}
+#app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px}
+.fade-in{animation:fadeIn .4s ease both}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.fade-in-slow{animation:fadeIn .8s ease both}
+.slide-up{animation:slideUp .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes slideUp{from{opacity:0;transform:translateY(40px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes breathe{0%,100%{opacity:.5}50%{opacity:1}}
+@keyframes heartbeat{0%,100%{transform:scale(1)}14%{transform:scale(1.08)}28%{transform:scale(1)}42%{transform:scale(1.05)}}
+.container{width:100%;max-width:500px}
+.logo-icon{font-size:4.5rem;color:var(--accent);margin-bottom:8px;text-shadow:0 0 40px rgba(198,40,40,.3)}
+.main-title{font-size:2.8rem;font-weight:900;background:linear-gradient(135deg,var(--accent-lt),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.3}
+.main-sub{color:var(--muted);font-size:1rem;margin:6px 0 32px}
+.input-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.input-row input{flex:1;padding:12px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);color:var(--text);font-family:inherit;font-size:1rem;outline:none;transition:border-color .3s}
+.input-row input:focus{border-color:var(--accent)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;border-radius:12px;border:none;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .25s;white-space:nowrap}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#a51c1c);color:#fff;box-shadow:0 4px 20px rgba(198,40,40,.25)}
+.btn-primary:hover{box-shadow:0 6px 28px rgba(198,40,40,.35);transform:translateY(-1px)}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#b8860b);color:#1a1200;box-shadow:0 4px 16px rgba(212,160,23,.2)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:var(--muted);color:var(--text)}
+.btn-full{width:100%}
+.btn-sm{padding:8px 16px;font-size:.85rem}
+.btn-lg{padding:16px 32px;font-size:1.1rem}
+.btn:disabled{opacity:.4;cursor:default;transform:none!important}
+.player-list{display:flex;flex-direction:column;gap:6px;margin-bottom:20px;max-height:260px;overflow-y:auto}
+.player-item{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:10px;background:var(--card);border:1px solid var(--border);font-size:.95rem}
+.player-item span{display:flex;align-items:center;gap:8px}
+.player-item button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.9rem;padding:4px 8px;border-radius:6px}
+.player-item button:hover{color:var(--accent-lt);background:rgba(198,40,40,.1)}
+.dist-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:20px}
+.dist-tag{font-size:.8rem;padding:5px 12px;border-radius:20px;background:var(--card);border:1px solid var(--border);color:var(--muted);font-weight:600}
+.dist-tag b{margin-left:2px}
+.time-options{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;justify-content:center}
+.time-opt{padding:8px 18px;border-radius:10px;border:2px solid var(--border);background:var(--card);color:var(--muted);font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer}
+.time-opt.active{border-color:var(--accent);color:var(--accent-lt);background:rgba(198,40,40,.08)}
+.pass-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;text-align:center;gap:20px}
+.pass-icon{font-size:3rem;color:var(--muted);animation:breathe 2s ease infinite}
+.pass-name{font-size:1.8rem;font-weight:900}
+.pass-hint{color:var(--muted);font-size:.9rem}
+.night-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:20px;background:rgba(198,40,40,.12);color:var(--accent-lt);font-size:.85rem;font-weight:700;margin-bottom:16px}
+.day-badge{background:rgba(212,160,23,.1);color:var(--gold)}
+.role-reveal{width:100%;max-width:320px;padding:32px 24px;border-radius:20px;border:2px solid var(--border);background:var(--card);text-align:center;cursor:pointer}
+.role-reveal:hover{border-color:var(--accent);transform:scale(1.02)}
+.role-reveal .role-icon{font-size:3.5rem;margin-bottom:12px}
+.role-reveal .role-name{font-size:1.5rem;font-weight:900}
+.player-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;width:100%;margin:16px 0}
+.player-card{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px;border-radius:12px;border:2px solid var(--border);background:var(--card);color:var(--text);font-family:inherit;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s}
+.player-card:hover{border-color:var(--accent);background:var(--card2);transform:translateY(-2px)}
+.player-card.dead{opacity:.3;pointer-events:none;text-decoration:line-through}
+.player-card.role-mafia{border-color:var(--accent);background:rgba(198,40,40,.1)}
+.player-card.role-doctor{border-color:var(--green);background:rgba(46,125,50,.08)}
+.player-card.role-investigator{border-color:var(--blue);background:rgba(21,101,192,.08)}
+.player-card.role-sniper{border-color:var(--orange);background:rgba(230,81,0,.08)}
+.player-card.role-citizen{border-color:var(--brown);background:rgba(93,64,55,.08)}
+.timer-big{font-size:3.5rem;font-weight:900;font-variant-numeric:tabular-nums;color:var(--gold);margin:16px 0}
+.death-card{width:100%;padding:24px;border-radius:16px;background:rgba(198,40,40,.08);border:1px solid rgba(198,40,40,.2);text-align:center;margin:16px 0}
+.death-card .death-name{font-size:1.3rem;font-weight:900;color:var(--accent-lt)}
+.safe-card{background:rgba(46,125,50,.06);border:1px solid rgba(46,125,50,.15);text-align:center}
+.safe-card .safe-text{font-size:1.1rem;font-weight:700;color:var(--green)}
+.vote-tally{width:100%;margin:16px 0}
+.vote-row{display:flex;justify-content:space-between;padding:10px 14px;background:var(--card);margin-bottom:6px;border-radius:10px}
+.vote-row.top{background:rgba(198,40,40,.08);border-color:var(--accent)}
+.vote-row .vr-count{font-weight:900;color:var(--accent-lt)}
+.mafia-partners{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:12px 0}
+.mafia-tag{padding:4px 12px;border-radius:8px;background:rgba(198,40,40,.12);color:var(--accent-lt);font-size:.85rem;font-weight:700}
+.invest-result{max-width:300px;padding:28px 20px;border-radius:18px;border:2px solid;margin:16px auto}
+.invest-result.is-mafia{border-color:var(--accent);background:rgba(198,40,40,.08)}
+.invest-result.is-safe{border-color:var(--green);background:rgba(46,125,50,.06)}
+.gameover-box{text-align:center;padding:40px 20px}
+.gameover-box .go-icon{font-size:5rem;margin-bottom:16px}
+.modal-overlay{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.9);backdrop-filter:blur(4px);justify-content:center;align-items:center;padding:20px}
+.modal-overlay.active{display:flex}
+.modal-box{width:100%;max-width:440px;max-height:80vh;overflow-y:auto;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px 24px}
+.modal-box h3{font-size:1.2rem;font-weight:700;margin-bottom:16px;color:var(--accent-lt)}
+.modal-box h4{font-size:1rem;font-weight:700;margin:16px 0 8px;color:var(--gold)}
+.modal-box ul{padding-right:18px}
+.toast-box{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:200;pointer-events:none}
+.toast{padding:10px 22px;border-radius:10px;font-weight:700;animation:fadeIn .3s ease,toastOut .3s ease 2.2s forwards}
+.toast.err{background:var(--accent);color:#fff}
+.toast.ok{background:var(--green);color:#fff}
+.toast.info{background:var(--gold);color:#1a1200}
+@keyframes toastOut{to{opacity:0;transform:translateY(-10px)}}
+.step-indicator{font-size:.8rem;color:var(--muted);margin-bottom:12px}
+.setting-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0;flex-wrap:wrap}
+.setting-row label{font-weight:600}
+.setting-row select,.setting-row input{background:var(--card);border:1px solid var(--border);color:var(--text);padding:6px 12px;border-radius:8px}
+@media(max-width:500px){.player-grid{grid-template-columns:repeat(auto-fill,minmax(90px,1fr))}}
+</style>
+</head>
+<body>
+<div id="embers"></div>
+<div id="app"></div>
+<div class="toast-box" id="toastBox"></div>
+<div class="modal-overlay" id="rulesModal"><div class="modal-box"><h3><i class="fas fa-book"></i> قواعد اللعبة</h3><h4>الليل</h4><ul><li>المافيا تقتل</li><li>الطبيب ينقذ</li><li>المحقق يكشف الدور</li><li>القناص (مواطن) يقتل مرة واحدة</li><li>المواطن فقط يمرر الجهاز</li></ul><h4>النهار</h4><ul><li>نقاش وتصويت</li><li>القناص يمكنه إطلاق رصاصته بعد التصويت</li></ul><button class="btn btn-primary btn-full" onclick="document.getElementById('rulesModal').classList.remove('active')">فهمت</button></div></div>
+
+<script>
+// ======================== الثوابت والكلاسات ========================
+const ROLES_INFO = {
+    mafia: { name:'المافيا', icon:'fa-skull-crossbones', color:'var(--accent-lt)', desc:'تقتل ليلاً بالتعاون مع زملائك' },
+    doctor: { name:'الطبيب', icon:'fa-heart-pulse', color:'var(--green)', desc:'تنقذ شخصاً واحداً كل ليلة' },
+    investigator: { name:'المحقق', icon:'fa-magnifying-glass', color:'var(--blue)', desc:'تكشف دور شخص واحد كل ليلة' },
+    sniper: { name:'القناص', icon:'fa-crosshairs', color:'var(--orange)', desc:'مواطن يمتلك رصاصة واحدة يقتل بها أي شخص ليلاً' },
+    citizen: { name:'مواطن', icon:'fa-user-shield', color:'var(--brown)', desc:'تصوت لكشف المافيا' }
+};
+
+let G = {
+    players: [],          // { name, role, alive }
+    round: 0,
+    discussTime: 120,
+    // الليل
+    nightActions: {
+        mafiaCurrentTarget: null,   // الهدف المتفق عليه مؤقتاً (يتغير مع كل مافيا)
+        doctorTarget: null,
+        investigatorTarget: null,
+        investigatorResult: null,
+        sniperTarget: null,
+        sniperHasShot: false
+    },
+    globalSniperUsed: false,
+    nightKilledByMafia: null,
+    nightKilledBySniper: null,
+    // النهار
+    votes: {},
+    voteOrder: [],
+    voteIndex: 0
+};
+let discTimer = null;
+let nightStepIndex = 0;
+let playersInNightOrder = [];
+let currentNightPlayerIdx = 0;
+
+// ======================== أدوات عامة ========================
+function shuffle(arr) { for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]} return arr; }
+function render(html) { document.getElementById('app').innerHTML = `<div class="container fade-in">${html}</div>`; }
+function toast(msg, type='info') { const box = document.getElementById('toastBox'); const t = document.createElement('div'); t.className = `toast ${type}`; t.textContent = msg; box.appendChild(t); setTimeout(() => t.remove(), 2600); }
+function alivePlayers() { return G.players.filter(p => p.alive); }
+function aliveMafia() { return G.players.filter(p => p.alive && p.role === 'mafia'); }
+function aliveCitizens() { return G.players.filter(p => p.alive && p.role !== 'mafia'); }
+function playerGrid(opts = {}) { const { excludeIdx = [], onSelect, showRole = false, showAliveOnly = false } = opts; let h = '<div class="player-grid">'; G.players.forEach((p, i) => { if(excludeIdx.includes(i)) return; if(showAliveOnly && !p.alive) return; const deadClass = !p.alive ? 'dead' : ''; const roleClass = showRole ? ` role-${p.role}` : ''; h += `<button class="player-card ${deadClass}${roleClass}" onclick="${onSelect}(${i})"><i class="fas ${showRole ? ROLES_INFO[p.role].icon : 'fa-user'}"></i><span class="pc-name">${p.name}</span>${showRole ? `<small>${ROLES_INFO[p.role].name}</small>` : ''}</button>`; }); h += '</div>'; return h; }
+function checkWin() { const m = aliveMafia().length; const c = aliveCitizens().length; if(m === 0) return 'citizens'; if(m >= c) return 'mafia'; return null; }
+
+// ======================== إعداد اللعبة ========================
+function renderSetup() {
+    const n = G.players.length;
+    let mafiaCount = 1, sniperCount = 0;
+    if(n >= 9) { mafiaCount = 3; sniperCount = 1; }
+    else if(n >= 7) { mafiaCount = 2; sniperCount = 1; }
+    else if(n >= 5) { mafiaCount = 1; sniperCount = (n>=6?1:0); }
+    
+    let playersHTML = '';
+    G.players.forEach((p,i) => { playersHTML += `<div class="player-item slide-up"><span><i class="fas fa-user"></i> ${p.name}</span><button onclick="removePlayer(${i})"><i class="fas fa-xmark"></i></button></div>`; });
+    render(`
+        <div style="text-align:center;margin-top:6vh"><div class="logo-icon"><i class="fas fa-skull-crossbones"></i></div><h1 class="main-title">مافيا</h1><p class="main-sub">لعبة الخداع والاستنتاج</p></div>
+        <div class="input-row"><input type="text" id="nameInput" placeholder="اسم اللاعب" maxlength="12" onkeydown="if(event.key==='Enter')addPlayer()"><button class="btn btn-primary btn-sm" onclick="addPlayer()"><i class="fas fa-plus"></i></button></div>
+        ${G.players.length ? `<div class="player-list">${playersHTML}</div>` : '<p style="text-align:center;color:var(--muted);margin-bottom:20px">أضف 5 لاعبين على الأقل</p>'}
+        <div class="setting-row"><label>عدد المافيا:</label><input type="number" id="mafiaCount" min="1" max="4" value="${mafiaCount}" step="1"></div>
+        <div class="setting-row"><label>القناص (0 أو 1):</label><input type="number" id="sniperCount" min="0" max="1" value="${sniperCount}" step="1"></div>
+        ${n >= 5 ? `<p class="section-label">مدة النقاش</p><div class="time-options">${[60,120,180,300,0].map(t=>`<button class="time-opt${G.discussTime===t?' active':''}" onclick="setDiscussTime(${t})">${t===0?'بدون مؤقت':t>=60?Math.floor(t/60)+' دقيقة':t+' ثانية'}</button>`).join('')}</div>
+        <button class="btn btn-primary btn-lg btn-full" onclick="startGame()"><i class="fas fa-play"></i> ابدأ اللعبة</button>` : ''}
+        <button class="btn btn-ghost btn-full" onclick="document.getElementById('rulesModal').classList.add('active')"><i class="fas fa-book"></i> قواعد اللعبة</button>
+    `);
+}
+
+function addPlayer() { const input = document.getElementById('nameInput'); const name = input.value.trim(); if(!name) return toast('أدخل اسم','err'); if(G.players.length>=15) return toast('الحد 15 لاعب','err'); if(G.players.some(p=>p.name===name)) return toast('الاسم موجود','err'); G.players.push({name, role:null, alive:true}); input.value=''; renderSetup(); }
+function removePlayer(i) { G.players.splice(i,1); renderSetup(); }
+function setDiscussTime(t) { G.discussTime = t; renderSetup(); }
+
+function startGame() {
+    const n = G.players.length;
+    if(n<5) return toast('يلزم 5 لاعبين على الأقل','err');
+    let mafiaCount = parseInt(document.getElementById('mafiaCount')?.value || 1);
+    let sniperCount = parseInt(document.getElementById('sniperCount')?.value || 0);
+    const doctorCount=1, investigatorCount=1;
+    let totalNeeded = mafiaCount+doctorCount+investigatorCount+sniperCount;
+    if(totalNeeded > n) { toast('عدد الأدوار أكبر من اللاعبين! قلل المافيا أو القناص','err'); return; }
+    let roles = [];
+    for(let i=0;i<mafiaCount;i++) roles.push('mafia');
+    for(let i=0;i<doctorCount;i++) roles.push('doctor');
+    for(let i=0;i<investigatorCount;i++) roles.push('investigator');
+    for(let i=0;i<sniperCount;i++) roles.push('sniper');
+    while(roles.length < n) roles.push('citizen');
+    roles = shuffle(roles);
+    G.players.forEach((p,i)=>{ p.role = roles[i]; p.alive = true; });
+    G.round = 0;
+    G.globalSniperUsed = false;
+    G.nightActions = { mafiaCurrentTarget: null, doctorTarget: null, investigatorTarget: null, investigatorResult: null, sniperTarget: null, sniperHasShot: false };
+    G.nightKilledByMafia = null;
+    G.nightKilledBySniper = null;
+    startRoleReveal();
+}
+
+// ======================== كشف الأدوار (تم إصلاحه) ========================
+let revealIndex = 0;
+function startRoleReveal() {
+    revealIndex = 0;
+    showNextReveal();
+}
+function showNextReveal() {
+    if(revealIndex >= G.players.length) {
+    // بعد انتهاء كشف الأدوار يبدأ الليل مباشرة
+    render(`
+        <div class="pass-screen">
+            <div class="pass-icon"><i class="fas fa-moon"></i></div>
+            <h2>انتهى توزيع الأدوار</h2>
+            <p class="pass-hint">الجميع أغلق الشاشة؟</p>
+            <button class="btn btn-primary btn-lg" onclick="startNight()">
+                بدء الليل
+            </button>
+        </div>
+    `);
+    return;
+}
+    const p = G.players[revealIndex];
+    render(`<div class="pass-screen"><div class="pass-icon"><i class="fas fa-mobile-alt"></i></div><p class="pass-hint">مرّر الجهاز إلى</p><div class="pass-name">${p.name}</div><button class="btn btn-primary btn-lg" onclick="revealRole(${revealIndex})">أنا ${p.name}</button></div>`);
+}
+window.revealRole = function(idx) {
+    const p = G.players[idx];
+    const r = ROLES_INFO[p.role];
+    let extra = '';
+    if(p.role === 'mafia') {
+        const partners = G.players.filter((pp,ii)=> pp.role==='mafia' && ii!==idx).map(pp=>pp.name);
+        if(partners.length) extra = `<div class="mafia-partners">شركاؤك: ${partners.map(n=>`<span class="mafia-tag">${n}</span>`).join('')}</div>`;
+    }
+    render(`<div style="display:flex;flex-direction:column;align-items:center;min-height:80vh"><div class="role-reveal"><div class="role-icon" style="color:${r.color}"><i class="fas ${r.icon}"></i></div><div class="role-name">${r.name}</div><div class="role-desc">${r.desc}</div>${extra}</div><button class="btn btn-ghost btn-lg" style="margin-top:24px" onclick="nextReveal()">فهمت، مرّر الجهاز</button></div>`);
+};
+window.nextReveal = function() { revealIndex++; showNextReveal(); };
+
+// ======================== الليل المتطور (مع تواصل المافيا) ========================
+function startNight() {
+    G.round++;
+    G.nightActions = { mafiaCurrentTarget: null, doctorTarget: null, investigatorTarget: null, investigatorResult: null, sniperTarget: null, sniperHasShot: false };
+    G.nightKilledByMafia = null;
+    G.nightKilledBySniper = null;
+    // ترتيب عشوائي للاعبين الأحياء
+    playersInNightOrder = shuffle(alivePlayers().map(p => G.players.indexOf(p)));
+    currentNightPlayerIdx = 0;
+    processNextNightPlayer();
+}
+
+function processNextNightPlayer() {
+    if(currentNightPlayerIdx >= playersInNightOrder.length) {
+        resolveNight();
+        return;
+    }
+    const playerIdx = playersInNightOrder[currentNightPlayerIdx];
+    const player = G.players[playerIdx];
+    render(`<div class="pass-screen"><div class="pass-icon"><i class="fas fa-moon"></i></div><p class="pass-hint">الليل - الجولة ${G.round}</p><p class="pass-hint">مرّر الجهاز إلى</p><div class="pass-name">${player.name}</div><button class="btn btn-primary btn-lg" onclick="showNightAction(${playerIdx})">أنا ${player.name}</button></div>`);
+}
+
+window.showNightAction = function(playerIdx) {
+    const player = G.players[playerIdx];
+    const role = player.role;
+    if(role === 'citizen') {
+        render(`<div class="pass-screen"><i class="fas fa-user-shield fa-3x" style="color:var(--brown)"></i><h3>أنت مواطن</h3><p>ليس لديك أي فعل في الليل.</p><button class="btn btn-gold btn-lg" onclick="finishNightAction()">أنهيت دوري</button></div>`);
+    }
+    else if(role === 'doctor') {
+        render(`<div style="text-align:center"><h3><i class="fas fa-heart-pulse" style="color:var(--green)"></i> الطبيب</h3><p>اختر من تريد إنقاذه هذه الليلة</p>${playerGrid({ showAliveOnly:true, onSelect:'selectDoctorTarget' })}<button class="btn btn-ghost" onclick="selectDoctorTarget(-1)">تخطي (لا إنقاذ)</button></div>`);
+    }
+    else if(role === 'mafia') {
+        let currentTarget = G.nightActions.mafiaCurrentTarget;
+        let currentTargetName = (currentTarget !== null && G.players[currentTarget]?.alive) ? G.players[currentTarget].name : 'لم يُختار بعد';
+        render(`<div style="text-align:center"><h3><i class="fas fa-skull-crossbones" style="color:var(--accent-lt)"></i> المافيا</h3>
+                <div class="mafia-partners"><span class="mafia-tag">الهدف الحالي: ${currentTargetName}</span></div>
+                <p>اختر ضحية جديدة أو أبقِ الهدف الحالي</p>
+                ${playerGrid({ showAliveOnly:true, onSelect:'mafiaSelectOrChange' })}
+                <button class="btn btn-gold" onclick="mafiaKeepTarget()">تأكيد الهدف الحالي (${currentTargetName})</button>
+                </div>`);
+    }
+    else if(role === 'investigator') {
+        render(`<div style="text-align:center"><h3><i class="fas fa-magnifying-glass" style="color:var(--blue)"></i> المحقق</h3><p>اختر شخصاً لتعرف دوره الحقيقي</p>${playerGrid({ showAliveOnly:true, onSelect:'selectInvestigatorTarget' })}</div>`);
+    }
+    else if(role === 'sniper') {
+        if(G.globalSniperUsed) {
+            toast('لقد استخدمت رصاصتك مسبقاً','err');
+            finishNightAction();
+        } else {
+            render(`<div style="text-align:center"><h3><i class="fas fa-crosshairs" style="color:var(--orange)"></i> القناص (مواطن)</h3><p>لديك رصاصة واحدة. اختر هدفاً لتصفيته هذه الليلة (لا يمكن إنقاذه)</p>${playerGrid({ showAliveOnly:true, onSelect:'selectSniperTarget' })}<button class="btn btn-ghost" onclick="selectSniperTarget(-1)">لا أريد القتل الآن</button></div>`);
+        }
+    }
+};
+
+// دوال المافيا الجديدة
+window.mafiaSelectOrChange = function(i) {
+    G.nightActions.mafiaCurrentTarget = i;
+    toast(`المافيا: تم تغيير الهدف إلى ${G.players[i].name}`,'info');
+    finishNightAction();
+};
+window.mafiaKeepTarget = function() {
+    if(G.nightActions.mafiaCurrentTarget === null) {
+        toast('لم يتم اختيار هدف بعد، الرجاء اختيار هدف أولاً','err');
+        return;
+    }
+    finishNightAction();
+};
+
+window.selectDoctorTarget = function(i) {
+    G.nightActions.doctorTarget = (i === -1 ? null : i);
+    finishNightAction();
+};
+window.selectInvestigatorTarget = function(i) {
+    G.nightActions.investigatorTarget = i;
+    const targetRole = G.players[i].role;
+    G.nightActions.investigatorResult = { targetName: G.players[i].name, roleRevealed: targetRole };
+    const r = ROLES_INFO[targetRole];
+    render(`<div class="invest-result ${targetRole==='mafia'?'is-mafia':'is-safe'}"><div class="ir-icon"><i class="fas ${r.icon}"></i></div><div class="ir-name">${G.players[i].name}</div><div class="ir-verdict">دوره: ${r.name}</div><button class="btn btn-primary" onclick="finishNightAction()">متابعة</button></div>`);
+    return;
+};
+window.selectSniperTarget = function(i) {
+    if(i !== -1) {
+        G.nightActions.sniperTarget = i;
+        G.nightActions.sniperHasShot = true;
+        G.globalSniperUsed = true;
+        toast('اخترت هدفاً، ستظهر النتيجة في الصباح','ok');
+    }
+    finishNightAction();
+};
+window.finishNightAction = function() {
+    currentNightPlayerIdx++;
+    processNextNightPlayer();
+};
+
+function resolveNight() {
+    // قتيل المافيا: الهدف المتفق عليه (آخر هدف تم اختياره من قبل أي مافيا)
+    let mafiaTarget = G.nightActions.mafiaCurrentTarget;
+    let saved = false;
+    if(mafiaTarget !== null && G.nightActions.doctorTarget !== null && G.nightActions.doctorTarget === mafiaTarget) saved = true;
+    if(mafiaTarget !== null && !saved && G.players[mafiaTarget]?.alive) {
+        G.players[mafiaTarget].alive = false;
+        G.nightKilledByMafia = mafiaTarget;
+    }
+    // قتيل القناص
+    if(G.nightActions.sniperTarget !== null && G.players[G.nightActions.sniperTarget]?.alive) {
+        G.players[G.nightActions.sniperTarget].alive = false;
+        G.nightKilledBySniper = G.nightActions.sniperTarget;
+    }
+    startDay();
+}
+
+// ======================== النهار ========================
+function startDay() {
+    const w = checkWin();
+    if(w) { renderGameOver(w); return; }
+    render(`<div class="pass-screen fade-in-slow"><div style="font-size:4rem;color:var(--gold)"><i class="fas fa-sun"></i></div><h2 style="font-size:2rem;color:var(--gold)">الصباح أتى</h2><p>الجولة ${G.round}</p></div>`);
+    setTimeout(() => dayAnnounce(), 2000);
+}
+function dayAnnounce() {
+    let killedList = [];
+    if(G.nightKilledByMafia !== null) killedList.push({name: G.players[G.nightKilledByMafia].name, by:'المافيا'});
+    if(G.nightKilledBySniper !== null) killedList.push({name: G.players[G.nightKilledBySniper].name, by:'القناص'});
+    let content = '';
+    if(killedList.length === 0) content = `<div class="safe-card slide-up"><i class="fas fa-shield-halved"></i><div class="safe-text">لم يمت أحد الليلة</div></div>`;
+    else content = killedList.map(k => `<div class="death-card slide-up"><i class="fas fa-skull"></i><div class="death-name">${k.name}</div><p>قُتل بواسطة ${k.by}</p></div>`).join('');
+    render(`<div style="text-align:center;padding-top:6vh"><span class="night-badge day-badge"><i class="fas fa-sun"></i> النهار - جولة ${G.round}</span><h2>نتيجة الليل</h2>${content}<div style="margin-top:20px"><p>الأحياء: ${alivePlayers().length} | المافيا: ${aliveMafia().length}</p><button class="btn btn-gold btn-lg btn-full" onclick="startDiscussion()">بدء النقاش</button></div></div>`);
+}
+function startDiscussion() {
+    if(G.discussTime === 0) { startVoting(); return; }
+    let timeLeft = G.discussTime;
+    render(`<div style="text-align:center"><span class="night-badge day-badge">النقاش</span><div class="timer-big" id="discTimer">${formatTime(timeLeft)}</div><button class="btn btn-primary" onclick="endDiscussion()">إنهاء النقاش والتصويت</button></div>`);
+    clearInterval(discTimer);
+    discTimer = setInterval(() => { timeLeft--; let el = document.getElementById('discTimer'); if(el) el.innerText = formatTime(timeLeft); if(timeLeft<=0){ clearInterval(discTimer); endDiscussion(); } }, 1000);
+}
+function formatTime(s){ let m=Math.floor(s/60); let sec=s%60; return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`; }
+function endDiscussion(){ clearInterval(discTimer); startVoting(); }
+function startVoting() {
+    G.votes = {};
+    G.voteOrder = alivePlayers().map(p => G.players.indexOf(p));
+    G.voteIndex = 0;
+    voteNextPass();
+}
+function voteNextPass() {
+    if(G.voteIndex >= G.voteOrder.length) { resolveVote(); return; }
+    const pidx = G.voteOrder[G.voteIndex];
+    const p = G.players[pidx];
+    render(`<div class="pass-screen"><span class="day-badge">تصويت ${G.voteIndex+1}/${G.voteOrder.length}</span><div class="pass-icon"><i class="fas fa-hand-paper"></i></div><p class="pass-hint">مرّر إلى</p><div class="pass-name">${p.name}</div><button class="btn btn-gold btn-lg" onclick="voteAction()">أنا ${p.name}</button></div>`);
+}
+function voteAction() {
+    const pidx = G.voteOrder[G.voteIndex];
+    render(`<div style="text-align:center"><span class="day-badge">تصويت ${G.voteIndex+1}</span><p>${G.players[pidx].name}، اختر من تريد إعدامه</p>${playerGrid({ excludeIdx:[pidx], showAliveOnly:true, onSelect:'castVote' })}<button class="btn btn-ghost" onclick="castVote(-1)">تخطي</button></div>`);
+}
+function castVote(targetIdx) {
+    G.votes[G.voteOrder[G.voteIndex]] = targetIdx;
+    G.voteIndex++;
+    voteNextPass();
+}
+function resolveVote() {
+    const tally = {};
+    alivePlayers().forEach(p => tally[G.players.indexOf(p)] = 0);
+    Object.values(G.votes).forEach(t => { if(t>=0 && tally[t]!==undefined) tally[t]++; });
+    const sorted = Object.entries(tally).sort((a,b)=>b[1]-a[1]);
+    const maxVotes = sorted[0]?.[1]||0;
+    const top = sorted.filter(([_,v])=> v===maxVotes);
+    let eliminated = null;
+    let resultHTML = '';
+    if(maxVotes===0 || top.length>1) resultHTML = `<div class="safe-card slide-up"><i class="fas fa-balance-scale"></i><div class="safe-text">تعادل - لم يُعدم أحد</div></div>`;
+    else {
+        eliminated = parseInt(top[0][0]);
+        G.players[eliminated].alive = false;
+        resultHTML = `<div class="death-card slide-up"><i class="fas fa-gavel"></i><div class="death-name">${G.players[eliminated].name}</div><p>تم إعدامه بتصويت الأغلبية<br>دوره: ${ROLES_INFO[G.players[eliminated].role].name}</p></div>`;
+    }
+    let tallyHTML = '<div class="vote-tally">'+sorted.map(([idx,count])=>`<div class="vote-row ${count===maxVotes && maxVotes>0 && top.length===1 ? 'top':''}"><span>${G.players[parseInt(idx)].name}</span><span class="vr-count">${count}</span></div>`).join('')+'</div>';
+    render(`<div style="text-align:center"><span class="day-badge">نتيجة التصويت</span>${tallyHTML}${resultHTML}<button class="btn btn-gold btn-full" onclick="afterVote(${eliminated!==null?eliminated:-1})">متابعة</button></div>`);
+}
+function afterVote(eliminatedIdx) {
+    const w = checkWin();
+    if(w) { renderGameOver(w); return; }
+    const sniperAlive = G.players.find(p=>p.role==='sniper' && p.alive && !G.globalSniperUsed);
+    if(sniperAlive) { askSniperDayShot(); return; }
+    startNight();
+}
+function askSniperDayShot() {
+    const sniper = G.players.find(p=>p.role==='sniper' && p.alive);
+    render(`<div class="pass-screen"><div class="pass-icon"><i class="fas fa-crosshairs"></i></div><p class="pass-hint">مرّر إلى</p><div class="pass-name">${sniper.name}</div><button class="btn btn-primary" onclick="showSniperDayChoice()">أنا ${sniper.name}</button></div>`);
+}
+function showSniperDayChoice() {
+    render(`<div style="text-align:center"><h3><i class="fas fa-crosshairs"></i> القناص</h3><p>لم تستخدم رصاصتك بعد. هل تريد إطلاقها الآن؟</p>${playerGrid({ showAliveOnly:true, onSelect:'sniperDayShoot' })}<button class="btn btn-ghost" onclick="sniperSkipDay()">لا، أحتفظ بها</button></div>`);
+}
+function sniperDayShoot(i) {
+    G.globalSniperUsed = true;
+    const target = G.players[i];
+    target.alive = false;
+    toast(`أطلق القناص النار على ${target.name}!`,'ok');
+    const w = checkWin();
+    if(w) renderGameOver(w);
+    else startNight();
+}
+function sniperSkipDay() { startNight(); }
+
+// ======================== نهاية اللعبة ========================
+function renderGameOver(winner) {
+    const isMafia = winner === 'mafia';
+    render(`<div class="gameover-box"><div class="go-icon" style="color:${isMafia?'var(--accent-lt)':'var(--gold)'}"><i class="fas ${isMafia?'fa-skull-crossbones':'fa-trophy'}"></i></div><h2>${isMafia?'المافيا تفوز!':'المواطنون يفوزون!'}</h2><p>${isMafia?'سيطرت المافيا على القرية':'تم القضاء على المافيا'}</p>${playerGrid({ showRole:true })}<button class="btn btn-primary btn-full" onclick="resetGame()">لعب مرة أخرى</button><button class="btn btn-ghost btn-full" onclick="renderSetup()">القائمة الرئيسية</button></div>`);
+}
+function resetGame() { G = { players: G.players.map(p=>({name:p.name, role:null, alive:true})), round:0, discussTime:120, nightActions:{ mafiaCurrentTarget:null, doctorTarget:null, investigatorTarget:null, investigatorResult:null, sniperTarget:null, sniperHasShot:false }, nightKilledByMafia:null, nightKilledBySniper:null, votes:{}, voteOrder:[], voteIndex:0, globalSniperUsed:false }; renderSetup(); }
+
+// بدء التشغيل
+renderSetup();
+
+// جسيمات النار
+(function createEmbers(){ let c=document.getElementById('embers'); for(let i=0;i<20;i++){ let e=document.createElement('div'); e.className='ember'; e.style.left=Math.random()*100+'%'; e.style.bottom='-10px'; e.style.animationDuration=(5+Math.random()*8)+'s'; e.style.animationDelay=Math.random()*6+'s'; e.style.width=e.style.height=(2+Math.random()*2)+'px'; c.appendChild(e); } })();
+</script>
+</body>
+</html>
