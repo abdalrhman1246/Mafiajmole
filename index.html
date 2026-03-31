@@ -101,6 +101,38 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .setting-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0;flex-wrap:wrap}
 .setting-row label{font-weight:600}
 .setting-row select,.setting-row input{background:var(--card);border:1px solid var(--border);color:var(--text);padding:6px 12px;border-radius:8px}
+.role-image{
+max-width:240px;
+max-height:240px;
+width:100%;
+height:auto;
+
+object-fit:contain;
+
+border-radius:18px;
+border:3px solid var(--border);
+
+background:#000;
+
+box-shadow:
+0 10px 30px rgba(0,0,0,.5),
+0 0 25px rgba(198,40,40,.15);
+
+margin:10px auto 16px auto;
+
+display:block;
+
+padding:6px;
+
+transition:transform .3s ease, box-shadow .3s ease;
+}
+
+.role-image:hover{
+transform:scale(1.03);
+box-shadow:
+0 14px 40px rgba(0,0,0,.6),
+0 0 35px rgba(198,40,40,.25);
+}
 @media(max-width:500px){.player-grid{grid-template-columns:repeat(auto-fill,minmax(90px,1fr))}}
 </style>
 </head>
@@ -113,11 +145,41 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <script>
 // ======================== الثوابت والكلاسات ========================
 const ROLES_INFO = {
-    mafia: { name:'المافيا', icon:'fa-skull-crossbones', color:'var(--accent-lt)', desc:'تقتل ليلاً بالتعاون مع زملائك' },
-    doctor: { name:'الطبيب', icon:'fa-heart-pulse', color:'var(--green)', desc:'تنقذ شخصاً واحداً كل ليلة' },
-    investigator: { name:'المحقق', icon:'fa-magnifying-glass', color:'var(--blue)', desc:'تكشف دور شخص واحد كل ليلة' },
-    sniper: { name:'القناص', icon:'fa-crosshairs', color:'var(--orange)', desc:'مواطن يمتلك رصاصة واحدة يقتل بها أي شخص ليلاً' },
-    citizen: { name:'مواطن', icon:'fa-user-shield', color:'var(--brown)', desc:'تصوت لكشف المافيا' }
+    mafia: { 
+        name:'المافيا',
+        icon:'fa-skull-crossbones',
+        color:'var(--accent-lt)',
+        desc:'تقتل ليلاً بالتعاون مع زملائك',
+        image:'images/mafia.jpg'
+    },
+    doctor: { 
+        name:'الطبيب',
+        icon:'fa-heart-pulse',
+        color:'var(--green)',
+        desc:'تنقذ شخصاً واحداً كل ليلة',
+        image:'images/doctor.jpg'
+    },
+    investigator: { 
+        name:'المحقق',
+        icon:'fa-magnifying-glass',
+        color:'var(--blue)',
+        desc:'تكشف دور شخص واحد كل ليلة',
+        image:'images/investigator.jpg'
+    },
+    sniper: { 
+        name:'القناص',
+        icon:'fa-crosshairs',
+        color:'var(--orange)',
+        desc:'مواطن يمتلك رصاصة واحدة يقتل بها أي شخص',
+        image:'images/sniper.jpg'
+    },
+    citizen: { 
+        name:'مواطن',
+        icon:'fa-user-shield',
+        color:'var(--brown)',
+        desc:'تصوت لكشف المافيا',
+        image:'images/citizen.jpg'
+    }
 };
 
 let G = {
@@ -231,14 +293,45 @@ function showNextReveal() {
     render(`<div class="pass-screen"><div class="pass-icon"><i class="fas fa-mobile-alt"></i></div><p class="pass-hint">مرّر الجهاز إلى</p><div class="pass-name">${p.name}</div><button class="btn btn-primary btn-lg" onclick="revealRole(${revealIndex})">أنا ${p.name}</button></div>`);
 }
 window.revealRole = function(idx) {
+
     const p = G.players[idx];
     const r = ROLES_INFO[p.role];
+
     let extra = '';
+
     if(p.role === 'mafia') {
-        const partners = G.players.filter((pp,ii)=> pp.role==='mafia' && ii!==idx).map(pp=>pp.name);
-        if(partners.length) extra = `<div class="mafia-partners">شركاؤك: ${partners.map(n=>`<span class="mafia-tag">${n}</span>`).join('')}</div>`;
+        const partners = G.players
+        .filter((pp,ii)=> pp.role==='mafia' && ii!==idx)
+        .map(pp=>pp.name);
+
+        if(partners.length)
+        extra = `<div class="mafia-partners">
+        شركاؤك: ${partners.map(n=>`<span class="mafia-tag">${n}</span>`).join('')}
+        </div>`;
     }
-    render(`<div style="display:flex;flex-direction:column;align-items:center;min-height:80vh"><div class="role-reveal"><div class="role-icon" style="color:${r.color}"><i class="fas ${r.icon}"></i></div><div class="role-name">${r.name}</div><div class="role-desc">${r.desc}</div>${extra}</div><button class="btn btn-ghost btn-lg" style="margin-top:24px" onclick="nextReveal()">فهمت، مرّر الجهاز</button></div>`);
+
+render(`
+<div style="display:flex;flex-direction:column;align-items:center;min-height:80vh">
+
+<div class="role-reveal">
+
+<img class="role-image" src="${r.image}">
+
+<div class="role-name">${r.name}</div>
+
+<div class="role-desc">${r.desc}</div>
+
+${extra}
+
+</div>
+
+<button class="btn btn-ghost btn-lg" style="margin-top:24px" onclick="nextReveal()">
+فهمت، مرّر الجهاز
+</button>
+
+</div>
+`);
+
 };
 window.nextReveal = function() { revealIndex++; showNextReveal(); };
 
@@ -268,10 +361,10 @@ window.showNightAction = function(playerIdx) {
     const player = G.players[playerIdx];
     const role = player.role;
     if(role === 'citizen') {
-        render(`<div class="pass-screen"><i class="fas fa-user-shield fa-3x" style="color:var(--brown)"></i><h3>أنت مواطن</h3><p>ليس لديك أي فعل في الليل.</p><button class="btn btn-gold btn-lg" onclick="finishNightAction()">أنهيت دوري</button></div>`);
+        render(`<div class="pass-screen"><i class="fas fa-user-shield fa-3x" style="color:var(--brown)"></i><h3> أنت مواطن</h3><p>ليس لديك أي فعل في الليل.</p><button class="btn btn-gold btn-lg" onclick="finishNightAction()">أنهيت دوري</button></div>`);
     }
     else if(role === 'doctor') {
-        render(`<div style="text-align:center"><h3><i class="fas fa-heart-pulse" style="color:var(--green)"></i> الطبيب</h3><p>اختر من تريد إنقاذه هذه الليلة</p>${playerGrid({ showAliveOnly:true, onSelect:'selectDoctorTarget' })}<button class="btn btn-ghost" onclick="selectDoctorTarget(-1)">تخطي (لا إنقاذ)</button></div>`);
+        render(`<div style="text-align:center"><h3><i class="fas fa-heart-pulse" style="color:var(--green)"></i>👨 الطبيب</h3><p>اختر من تريد إنقاذه هذه الليلة</p>${playerGrid({ showAliveOnly:true, onSelect:'selectDoctorTarget' })}<button class="btn btn-ghost" onclick="selectDoctorTarget(-1)">تخطي (لا إنقاذ)</button></div>`);
     }
     else if(role === 'mafia') {
         let currentTarget = G.nightActions.mafiaCurrentTarget;
